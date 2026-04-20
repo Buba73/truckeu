@@ -17,7 +17,7 @@ try {
 } catch { /* ignore */ }
 
 const BASE = "https://verkehr.autobahn.de/o/autobahn";
-const PRIORITY_ROADS = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"];
+const PRIORITY_ROADS = null; // null = všechny dálnice
 
 const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
@@ -36,7 +36,7 @@ async function main() {
   console.log("🚛 TruckEU sync start...\n");
 
   const { roads } = await fetch(`${BASE}/`).then(r => r.json());
-  const toProcess = roads.filter(r => PRIORITY_ROADS.includes(r));
+  const toProcess = PRIORITY_ROADS ? roads.filter(r => PRIORITY_ROADS.includes(r)) : roads;
   console.log(`📍 Zpracovávám ${toProcess.length} dálnic: ${toProcess.join(", ")}\n`);
 
   let saved = 0, errors = 0;

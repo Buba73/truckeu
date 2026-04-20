@@ -3,8 +3,8 @@ import { fetchRoads, fetchRoadworks, fetchClosures, AutobahnItem } from "@/lib/a
 import { translateToCzech } from "@/lib/gemini";
 import { upsertRoadwork } from "@/lib/supabase";
 
-// Dálnice které zpracováváme – hlavní tranzitní trasy relevantní pro kamiony
-const PRIORITY_ROADS = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"];
+// null = všechny dálnice z API
+const PRIORITY_ROADS: string[] | null = null;
 
 const CRON_SECRET = process.env.CRON_SECRET;
 
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
   try {
     const allRoads = await fetchRoads();
-    const roads = allRoads.filter((r) => PRIORITY_ROADS.includes(r));
+    const roads = PRIORITY_ROADS ? allRoads.filter((r) => PRIORITY_ROADS.includes(r)) : allRoads;
 
     for (const road of roads) {
       try {
