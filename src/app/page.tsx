@@ -13,14 +13,14 @@ export default async function HomePage() {
   return (
     <>
       <header>
-        <a className="logo" href="#">TRUCK<span>EU</span></a>
+        <a className="logo" href="/">TRUCK<span>EU</span></a>
         <nav>
-          <a href="#" className="active">Přehled</a>
-          <a href="#">Zákazy jízd</a>
-          <a href="#">Omezení</a>
-          <a href="#">Uzavírky</a>
-          <a href="#">Rady</a>
-          <a href="#">Státy EU</a>
+          <a href="/" className="active">Přehled</a>
+          <a href="/zakazy">Zákazy jízd</a>
+          <a href="/upozorneni">Omezení</a>
+          <a href="/upozorneni">Uzavírky</a>
+          <a href="/rady">Rady</a>
+          <a href="/zeme">Státy EU</a>
         </nav>
         <div className="header-right">
           <div className="live-badge"><div className="live-dot"></div>LIVE</div>
@@ -186,11 +186,11 @@ export default async function HomePage() {
               <div className="card-title"><span className="icon">🔗</span> Rychlé odkazy</div>
             </div>
             <div className="quick-links">
-              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">🌍</span> Mýtné kalkulačka EU</div><span className="ql-arrow">→</span></div>
-              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">🗺️</span> Plánování trasy</div><span className="ql-arrow">→</span></div>
-              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">📋</span> Kontrolní seznam dokladů</div><span className="ql-arrow">→</span></div>
-              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">📞</span> Tísňová čísla EU</div><span className="ql-arrow">→</span></div>
-              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">⛽</span> Ceny nafty v EU</div><span className="ql-arrow">→</span></div>
+              <a className="quick-link" href="/zakazy"><div className="quick-link-left"><span className="ql-icon">🚫</span> Zákazy jízd v EU</div><span className="ql-arrow">→</span></a>
+              <a className="quick-link" href="/upozorneni"><div className="quick-link-left"><span className="ql-icon">⚠️</span> Uzavírky &amp; Omezení</div><span className="ql-arrow">→</span></a>
+              <a className="quick-link" href="/rady"><div className="quick-link-left"><span className="ql-icon">📋</span> Rady &amp; Tipy</div><span className="ql-arrow">→</span></a>
+              <a className="quick-link" href="/rady"><div className="quick-link-left"><span className="ql-icon">📞</span> Tísňová čísla EU</div><span className="ql-arrow">→</span></a>
+              <a className="quick-link" href="/zeme"><div className="quick-link-left"><span className="ql-icon">🌍</span> Státy EU</div><span className="ql-arrow">→</span></a>
             </div>
           </div>
 
@@ -273,10 +273,10 @@ export default async function HomePage() {
               ["🇭🇺","Maďarsko"],["🇷🇴","Rumunsko"],["🇧🇬","Bulharsko"],["🇳🇱","Holandsko"],
               ["🇧🇪","Belgie"],["🇨🇭","Švýcarsko"],["🇸🇮","Slovinsko"],["🇭🇷","Chorvatsko"],
             ].map(([flag, name]) => (
-              <div key={name} className="country-btn">
+              <a key={name} className="country-btn" href={`/zeme/${name?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "-")}`}>
                 <span className="country-flag">{flag}</span>
                 <span className="country-name">{name}</span>
-              </div>
+              </a>
             ))}
           </div>
         </div>

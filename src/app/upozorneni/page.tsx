@@ -1,5 +1,6 @@
 import { roadAlerts } from "@/lib/data";
 import { SeverityBadge, TypeBadge } from "@/components/AlertBadge";
+import SubNav from "@/components/SubNav";
 
 export default function UpozorneniPage() {
   const sorted = [...roadAlerts].sort((a, b) => {
@@ -8,6 +9,8 @@ export default function UpozorneniPage() {
   });
 
   return (
+    <>
+    <SubNav active="/upozorneni" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">⚠️ Uzavírky & Omezení</h1>
@@ -89,5 +92,6 @@ export default function UpozorneniPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
