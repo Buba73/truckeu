@@ -1,4 +1,15 @@
-export default function HomePage() {
+import { getLatestRoadworks, Roadwork } from "@/lib/supabase";
+
+async function loadRoadworks(): Promise<Roadwork[]> {
+  try {
+    return await getLatestRoadworks(6);
+  } catch {
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const roadworks = await loadRoadworks();
   return (
     <>
       <header>
@@ -185,25 +196,32 @@ export default function HomePage() {
 
           <div className="card">
             <div className="card-header">
-              <div className="card-title"><span className="icon">🚧</span> Uzavírky</div>
-              <span className="card-badge badge-blue">Live</span>
+              <div className="card-title"><span className="icon">🚧</span> Uzavírky DE</div>
+              <span className="card-badge badge-blue">{roadworks.length > 0 ? "Live DB" : "API"}</span>
             </div>
             <div className="news-list">
-              <div className="news-item">
-                <div className="news-meta"><span className="news-flag">🇦🇹</span><span className="news-time">Dnes 06:14</span></div>
-                <div className="news-title">Brenner A13 – omezení na 1 pruh</div>
-                <div className="news-excerpt">Km 22–28, do pátku 25. 4., práce na vozovce</div>
-              </div>
-              <div className="news-item">
-                <div className="news-meta"><span className="news-flag">🇩🇪</span><span className="news-time">Včera 18:30</span></div>
-                <div className="news-title">A9 Mnichov – kolona 18 km</div>
-                <div className="news-excerpt">Nehoda, doporučen objezd přes B13</div>
-              </div>
-              <div className="news-item">
-                <div className="news-meta"><span className="news-flag">🇨🇿</span><span className="news-time">18. 4.</span></div>
-                <div className="news-title">D1 Brno–Praha – noční uzavírka</div>
-                <div className="news-excerpt">Km 153–157, každou noc 21:00–05:00, do 30. 4.</div>
-              </div>
+              {roadworks.length > 0 ? (
+                roadworks.map((rw) => (
+                  <div className="news-item" key={rw.identifier}>
+                    <div className="news-meta">
+                      <span className="news-flag">🇩🇪</span>
+                      <span className="news-time">{rw.autobahn} · {rw.type === "closure" ? "Uzavírka" : "Práce"}</span>
+                    </div>
+                    <div className="news-title">{rw.title_cs}</div>
+                    {rw.description_cs && (
+                      <div className="news-excerpt">{rw.description_cs.split("\n")[0]}</div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="news-item">
+                    <div className="news-meta"><span className="news-flag">🇩🇪</span><span className="news-time">autobahn.de</span></div>
+                    <div className="news-title">Data se načítají po prvním sync</div>
+                    <div className="news-excerpt">Zavolej /api/sync-roadworks pro první synchronizaci</div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
