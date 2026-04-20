@@ -1,150 +1,279 @@
-import Link from "next/link";
-import { drivingBans, roadAlerts } from "@/lib/data";
-import { SeverityBadge, TypeBadge } from "@/components/AlertBadge";
-
 export default function HomePage() {
-  const highAlerts = roadAlerts.filter((a) => a.severity === "high");
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Hero */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-          🚛 <span className="text-amber-400">TruckEU</span>
-        </h1>
-        <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-          Kompletní informace pro kamionovou dopravu v Evropě — zákazy jízd,
-          silniční uzavírky, omezení a profesionální rady.
-        </p>
+    <>
+      <header>
+        <a className="logo" href="#">TRUCK<span>EU</span></a>
+        <nav>
+          <a href="#" className="active">Přehled</a>
+          <a href="#">Zákazy jízd</a>
+          <a href="#">Omezení</a>
+          <a href="#">Uzavírky</a>
+          <a href="#">Rady</a>
+          <a href="#">Státy EU</a>
+        </nav>
+        <div className="header-right">
+          <div className="live-badge"><div className="live-dot"></div>LIVE</div>
+        </div>
+      </header>
+
+      <div className="hero">
+        <div className="hero-tag">Bezplatný portál pro dopravce</div>
+        <h1>VŠE CO<br />ŘIDIČ <em>POTŘEBUJE</em></h1>
+        <p className="hero-sub">Zákazy jízd, omezení, uzavírky a rady pro celou EU – přehledně, zdarma a na jednom místě.</p>
+        <div className="hero-stats">
+          <div className="stat"><span className="stat-num">27</span><span className="stat-label">zemí EU</span></div>
+          <div className="stat"><span className="stat-num">100%</span><span className="stat-label">zdarma</span></div>
+          <div className="stat"><span className="stat-num">24/7</span><span className="stat-label">aktualizace</span></div>
+        </div>
       </div>
 
-      {/* Quick stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
-        {[
-          { label: "Sledovaných zemí", value: drivingBans.length, icon: "🗺️" },
-          { label: "Aktivních upozornění", value: roadAlerts.length, icon: "⚠️" },
-          { label: "Kritických alertů", value: highAlerts.length, icon: "🚨" },
-          { label: "Rad & tipů", value: "8+", icon: "💡" },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="bg-slate-800 rounded-xl p-5 text-center border border-slate-700"
-          >
-            <div className="text-3xl mb-2">{stat.icon}</div>
-            <div className="text-2xl font-bold text-amber-400">{stat.value}</div>
-            <div className="text-slate-400 text-sm">{stat.label}</div>
+      <div className="alert-bar">
+        <div className="alert-icon">🚨</div>
+        <div className="alert-text">
+          <strong>AKTIVNÍ ZÁKAZ – Německo</strong>
+          <p>Zákaz jízdy vozidel nad 7,5 t platí tuto neděli 20. 4. od 00:00 do 22:00 na celém území.</p>
+        </div>
+        <div className="alert-time">Dnes 00:01</div>
+      </div>
+
+      <div className="search-wrap">
+        <div className="search-box">
+          <span className="search-icon">🔍</span>
+          <input type="text" placeholder="Hledat stát, omezení, radu..." />
+          <span className="search-kbd">⌘K</span>
+        </div>
+      </div>
+
+      <div className="main-grid">
+
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title"><span className="icon">🚫</span> Zákazy jízd</div>
+            <span className="card-badge badge-red">Tento víkend</span>
           </div>
-        ))}
+          <div className="ban-list">
+            <div className="ban-item">
+              <div className="flag">🇩🇪</div>
+              <div className="ban-info">
+                <div className="ban-country">Německo</div>
+                <div className="ban-detail">Ned 00:00–22:00 · vozidla nad 7,5 t</div>
+              </div>
+              <div className="ban-status status-active">AKTIVNÍ</div>
+            </div>
+            <div className="ban-item">
+              <div className="flag">🇦🇹</div>
+              <div className="ban-info">
+                <div className="ban-country">Rakousko</div>
+                <div className="ban-detail">Ned 00:00–22:00 · vozidla nad 7,5 t</div>
+              </div>
+              <div className="ban-status status-active">AKTIVNÍ</div>
+            </div>
+            <div className="ban-item">
+              <div className="flag">🇫🇷</div>
+              <div className="ban-info">
+                <div className="ban-country">Francie</div>
+                <div className="ban-detail">Sob 22:00 – Ned 22:00 · nad 3,5 t</div>
+              </div>
+              <div className="ban-status status-active">AKTIVNÍ</div>
+            </div>
+            <div className="ban-item">
+              <div className="flag">🇨🇭</div>
+              <div className="ban-info">
+                <div className="ban-country">Švýcarsko</div>
+                <div className="ban-detail">Ned 00:00–24:00 · průjezdní tranzit</div>
+              </div>
+              <div className="ban-status status-active">AKTIVNÍ</div>
+            </div>
+            <div className="ban-item">
+              <div className="flag">🇮🇹</div>
+              <div className="ban-info">
+                <div className="ban-country">Itálie</div>
+                <div className="ban-detail">Příští sob 08:00–22:00 · nad 7,5 t</div>
+              </div>
+              <div className="ban-status status-soon">ZA 6 DNÍ</div>
+            </div>
+            <div className="ban-item">
+              <div className="flag">🇨🇿</div>
+              <div className="ban-info">
+                <div className="ban-country">Česko</div>
+                <div className="ban-detail">Žádný zákaz tento víkend</div>
+              </div>
+              <div className="ban-status status-free">VOLNO</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title"><span className="icon">⚖️</span> Omezení</div>
+            <span className="card-badge badge-orange">Hmotnost &amp; rozměry</span>
+          </div>
+          <div className="restrict-list">
+            <div className="restrict-item">
+              <div className="flag">🇩🇪</div>
+              <div className="restrict-info">
+                <div className="restrict-country">Německo</div>
+                <div className="restrict-tags">
+                  <span className="tag">Max 40 t</span>
+                  <span className="tag">Šířka 2,55 m</span>
+                  <span className="tag">Výška 4 m</span>
+                  <span className="tag tag-warn">LKW-Maut povinná</span>
+                </div>
+              </div>
+            </div>
+            <div className="restrict-item">
+              <div className="flag">🇦🇹</div>
+              <div className="restrict-info">
+                <div className="restrict-country">Rakousko</div>
+                <div className="restrict-tags">
+                  <span className="tag">Max 40 t</span>
+                  <span className="tag">Výška 4 m</span>
+                  <span className="tag tag-warn">GO-Maut povinná</span>
+                  <span className="tag tag-warn">Sektorový zákaz Brenner</span>
+                </div>
+              </div>
+            </div>
+            <div className="restrict-item">
+              <div className="flag">🇫🇷</div>
+              <div className="restrict-info">
+                <div className="restrict-country">Francie</div>
+                <div className="restrict-tags">
+                  <span className="tag">Max 44 t</span>
+                  <span className="tag">Šířka 2,55 m</span>
+                  <span className="tag tag-warn">Vignette Crit&apos;Air</span>
+                </div>
+              </div>
+            </div>
+            <div className="restrict-item">
+              <div className="flag">🇵🇱</div>
+              <div className="restrict-info">
+                <div className="restrict-country">Polsko</div>
+                <div className="restrict-tags">
+                  <span className="tag">Max 40 t</span>
+                  <span className="tag">Výška 4 m</span>
+                  <span className="tag">e-TOLL povinný</span>
+                </div>
+              </div>
+            </div>
+            <div className="restrict-item">
+              <div className="flag">🇨🇭</div>
+              <div className="restrict-info">
+                <div className="restrict-country">Švýcarsko</div>
+                <div className="restrict-tags">
+                  <span className="tag tag-warn">Max 40 t</span>
+                  <span className="tag tag-warn">LSVA poplatek</span>
+                  <span className="tag">Noční klid 22:00–05:00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="sidebar">
+          <div className="card">
+            <div className="card-header">
+              <div className="card-title"><span className="icon">🔗</span> Rychlé odkazy</div>
+            </div>
+            <div className="quick-links">
+              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">🌍</span> Mýtné kalkulačka EU</div><span className="ql-arrow">→</span></div>
+              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">🗺️</span> Plánování trasy</div><span className="ql-arrow">→</span></div>
+              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">📋</span> Kontrolní seznam dokladů</div><span className="ql-arrow">→</span></div>
+              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">📞</span> Tísňová čísla EU</div><span className="ql-arrow">→</span></div>
+              <div className="quick-link"><div className="quick-link-left"><span className="ql-icon">⛽</span> Ceny nafty v EU</div><span className="ql-arrow">→</span></div>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-header">
+              <div className="card-title"><span className="icon">🚧</span> Uzavírky</div>
+              <span className="card-badge badge-blue">Live</span>
+            </div>
+            <div className="news-list">
+              <div className="news-item">
+                <div className="news-meta"><span className="news-flag">🇦🇹</span><span className="news-time">Dnes 06:14</span></div>
+                <div className="news-title">Brenner A13 – omezení na 1 pruh</div>
+                <div className="news-excerpt">Km 22–28, do pátku 25. 4., práce na vozovce</div>
+              </div>
+              <div className="news-item">
+                <div className="news-meta"><span className="news-flag">🇩🇪</span><span className="news-time">Včera 18:30</span></div>
+                <div className="news-title">A9 Mnichov – kolona 18 km</div>
+                <div className="news-excerpt">Nehoda, doporučen objezd přes B13</div>
+              </div>
+              <div className="news-item">
+                <div className="news-meta"><span className="news-flag">🇨🇿</span><span className="news-time">18. 4.</span></div>
+                <div className="news-title">D1 Brno–Praha – noční uzavírka</div>
+                <div className="news-excerpt">Km 153–157, každou noc 21:00–05:00, do 30. 4.</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Urgent alerts */}
-      {highAlerts.length > 0 && (
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-            🚨 Kritická upozornění
-          </h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {highAlerts.map((alert) => (
-              <div
-                key={alert.id}
-                className="bg-red-950 border border-red-800 rounded-xl p-5"
-              >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">{alert.flag}</span>
-                    <span className="font-semibold text-white">{alert.title}</span>
-                  </div>
-                  <TypeBadge type={alert.type} />
-                </div>
-                <p className="text-slate-300 text-sm mb-3">{alert.description}</p>
-                <div className="flex items-center justify-between text-xs text-slate-400">
-                  <span>📍 {alert.route}</span>
-                  <span>Platí do: {alert.validUntil}</span>
-                </div>
+      <div className="bottom-grid">
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title"><span className="icon">💡</span> Rady řidičům</div>
+            <span className="card-badge badge-green">Aktuální</span>
+          </div>
+          <div className="tips-list">
+            <div className="tip-item">
+              <div className="tip-num">01</div>
+              <div className="tip-content">
+                <div className="tip-cat">Dokumenty</div>
+                <div className="tip-title">Co musíš mít vždy u sebe v EU</div>
+                <div className="tip-text">Řidičský průkaz, profesní průkaz (CPC), CMR, osvědčení o vozidle, pojistka a kabotážní povolení pokud je potřeba.</div>
+              </div>
+            </div>
+            <div className="tip-item">
+              <div className="tip-num">02</div>
+              <div className="tip-content">
+                <div className="tip-cat">Digitální tachograf</div>
+                <div className="tip-title">Povinné přestávky a doby řízení</div>
+                <div className="tip-text">Max 4,5 h řízení, pak 45 min přestávka. Denní limit 9 h (2× týdně 10 h). Týdenní max 56 h.</div>
+              </div>
+            </div>
+            <div className="tip-item">
+              <div className="tip-num">03</div>
+              <div className="tip-content">
+                <div className="tip-cat">Švýcarsko</div>
+                <div className="tip-title">Pozor na LSVA – výpočet poplatku</div>
+                <div className="tip-text">Poplatek závisí na hmotnosti, ujetých km a emisní třídě. Nezapomeň se přihlásit před vstupem.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-header">
+            <div className="card-title"><span className="icon">🌍</span> Státy EU</div>
+            <span className="card-badge badge-orange">27 zemí</span>
+          </div>
+          <div className="country-grid">
+            {[
+              ["🇨🇿","Česko"],["🇩🇪","Německo"],["🇦🇹","Rakousko"],["🇫🇷","Francie"],
+              ["🇵🇱","Polsko"],["🇮🇹","Itálie"],["🇪🇸","Španělsko"],["🇸🇰","Slovensko"],
+              ["🇭🇺","Maďarsko"],["🇷🇴","Rumunsko"],["🇧🇬","Bulharsko"],["🇳🇱","Holandsko"],
+              ["🇧🇪","Belgie"],["🇨🇭","Švýcarsko"],["🇸🇮","Slovinsko"],["🇭🇷","Chorvatsko"],
+            ].map(([flag, name]) => (
+              <div key={name} className="country-btn">
+                <span className="country-flag">{flag}</span>
+                <span className="country-name">{name}</span>
               </div>
             ))}
           </div>
         </div>
-      )}
-
-      {/* Navigation cards */}
-      <div className="grid sm:grid-cols-3 gap-6 mb-12">
-        {[
-          {
-            href: "/zakazy",
-            icon: "🚫",
-            title: "Zákazy jízd",
-            desc: "Přehled zákazů jízdy o víkendech a svátcích pro všechny země EU",
-            color: "from-red-900 to-red-950 border-red-800",
-          },
-          {
-            href: "/upozorneni",
-            icon: "⚠️",
-            title: "Uzavírky & Omezení",
-            desc: "Aktuální silniční uzavírky, tonážní omezení a výstrahy",
-            color: "from-amber-900 to-amber-950 border-amber-800",
-          },
-          {
-            href: "/rady",
-            icon: "💡",
-            title: "Rady & Tipy",
-            desc: "Dokumenty, tachograf, mýtné, zimní provoz a bezpečnost",
-            color: "from-blue-900 to-blue-950 border-blue-800",
-          },
-        ].map((card) => (
-          <Link
-            key={card.href}
-            href={card.href}
-            className={`bg-gradient-to-br ${card.color} border rounded-xl p-6 hover:scale-105 transition-transform`}
-          >
-            <div className="text-4xl mb-3">{card.icon}</div>
-            <h3 className="text-xl font-bold text-white mb-2">{card.title}</h3>
-            <p className="text-slate-300 text-sm">{card.desc}</p>
-          </Link>
-        ))}
       </div>
 
-      {/* Country overview */}
-      <div>
-        <h2 className="text-2xl font-bold text-white mb-4">
-          🗺️ Přehled zemí — víkendové zákazy
-        </h2>
-        <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-slate-700 text-slate-300">
-                  <th className="text-left p-4">Země</th>
-                  <th className="text-left p-4">Víkend</th>
-                  <th className="text-left p-4 hidden md:table-cell">Svátky</th>
-                  <th className="text-left p-4 hidden lg:table-cell">Platí od</th>
-                </tr>
-              </thead>
-              <tbody>
-                {drivingBans.map((ban, i) => (
-                  <tr
-                    key={ban.country}
-                    className={`border-t border-slate-700 ${i % 2 === 0 ? "" : "bg-slate-800/50"}`}
-                  >
-                    <td className="p-4 font-medium text-white">
-                      {ban.flag} {ban.country}
-                    </td>
-                    <td className="p-4 text-slate-300">{ban.weekend}</td>
-                    <td className="p-4 text-slate-300 hidden md:table-cell">{ban.holiday}</td>
-                    <td className="p-4 text-amber-400 hidden lg:table-cell">{ban.maxWeight}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <footer>
+        <div>© 2025 TruckEU · Zdarma pro všechny řidiče</div>
+        <div style={{display:"flex",gap:"16px"}}>
+          <a href="#">O portálu</a>
+          <a href="#">Nahlásit chybu</a>
+          <a href="#">Přidat info</a>
+          <a href="#">Kontakt</a>
         </div>
-        <p className="text-slate-400 text-sm mt-2">
-          * Zobrazena maximální hmotnost vozidla, od které se zákaz vztahuje.{" "}
-          <Link href="/zakazy" className="text-amber-400 hover:underline">
-            Zobrazit detaily →
-          </Link>
-        </p>
-      </div>
-    </div>
+        <div style={{fontFamily:"var(--font-mono)",color:"var(--muted)"}}>Poslední aktualizace: dnes 08:42</div>
+      </footer>
+    </>
   );
 }

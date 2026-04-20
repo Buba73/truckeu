@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "TruckEU – Dopravní portál pro kamioňáky",
+  title: "TruckEU – Dopravní portál pro řidiče",
   description: "Zákazy jízd, omezení, uzavírky a rady pro kamionovou dopravu v celé Evropě.",
 };
 
@@ -14,12 +12,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="cs" className="h-full">
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+    <html lang="cs">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
