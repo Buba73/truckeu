@@ -27,6 +27,9 @@ export interface Country {
   speedHighway: number;
   speedRoad: number;
   speedCity: number;
+  speedNote?: string;
+  alcoholGeneral?: string;    // g/l krve, obecný limit
+  alcoholProfessional?: string; // g/l krve, profesionální řidiči (kamion)
   winterTyresRequired: boolean;
   winterTyresPeriod: string;
   emergencyNumber: string;
@@ -47,6 +50,8 @@ export const countries: Country[] = [
     maxWeight: 40, maxLength: 18.75, maxWidth: 2.55, maxHeight: 4.0,
     tollSystem: "Toll Collect (LKW-Maut)", tollInfo: "Povinná OBU jednotka pro vozidla nad 7,5 t na dálnicích a spolkových silnicích.",
     speedHighway: 80, speedRoad: 60, speedCity: 50,
+    speedNote: "Platí pro vozidla >3,5 t. Spolkové silnice (Bundesstraße): 60 km/h. Zdroj: StVO §3",
+    alcoholGeneral: "0,5", alcoholProfessional: "0,0",
     winterTyresRequired: true, winterTyresPeriod: "Situačně (sníh/náledí) – bez pevného termínu",
     emergencyNumber: "112", policeNumber: "110",
     requiredEquipment: ["Výstražný trojúhelník", "Reflexní vesta", "Lékárnička"],
@@ -165,7 +170,9 @@ export const countries: Country[] = [
     code: "FR", name: "Francie", flag: "🇫🇷", capital: "Paříž", currency: "EUR",
     maxWeight: 44, maxLength: 18.75, maxWidth: 2.55, maxHeight: 4.0,
     tollSystem: "Télépéage (Liber-t)", tollInfo: "Placené dálnice. Liber-t transponder doporučen. Ceny variabilní dle trasy a kategorie vozidla.",
-    speedHighway: 80, speedRoad: 80, speedCity: 50,
+    speedHighway: 80, speedRoad: 60, speedCity: 50,
+    speedNote: "Ověřeno europa.eu/youreurope: vozidla >3,5 t – dálnice 80, silnice 80 km/h; soupravy >12 t – silnice 60 km/h",
+    alcoholGeneral: "0,5", alcoholProfessional: "0,2",
     winterTyresRequired: true, winterTyresPeriod: "1. listopadu – 31. března (povinné ve vybraných departmentech dle vyhlášky z r. 2020)",
     emergencyNumber: "112", policeNumber: "17",
     requiredEquipment: ["Výstražný trojúhelník (2×)", "Reflexní vesta", "Lékárnička", "Alkohol tester (doporučen)"],
@@ -207,6 +214,7 @@ export const countries: Country[] = [
     maxWeight: 44, maxLength: 18.75, maxWidth: 2.55, maxHeight: 4.0,
     tollSystem: "Autostrade (Telepass)", tollInfo: "Placené dálnice. Telepass transponder doporučen. Platba hotovostí nebo kartou na mýtných stanicích.",
     speedHighway: 80, speedRoad: 70, speedCity: 50,
+    speedNote: "Ověřeno europa.eu/youreurope: vozidla do 12 t – dálnice 100 km/h, silnice 80 km/h; vozidla nad 12 t – dálnice 80 km/h, silnice 70 km/h. Zobrazeny limity pro >12 t (typická souprava).",
     winterTyresRequired: true, winterTyresPeriod: "15. října – 15. dubna (variuje dle regionu, alpské oblasti dříve)",
     emergencyNumber: "112", policeNumber: "113",
     requiredEquipment: ["Výstražný trojúhelník", "Reflexní vesta", "Lékárnička"],
@@ -248,7 +256,8 @@ export const countries: Country[] = [
     code: "ES", name: "Španělsko", flag: "🇪🇸", capital: "Madrid", currency: "EUR",
     maxWeight: 44, maxLength: 18.75, maxWidth: 2.55, maxHeight: 4.0,
     tollSystem: "Peaje (placené dálnice)", tollInfo: "Část dálnic zpoplatněna. Trend postupného rušení mýtného (AP-7 Středomoří, AP-9 Galície zdarma od r. 2021).",
-    speedHighway: 80, speedRoad: 80, speedCity: 50,
+    speedHighway: 90, speedRoad: 80, speedCity: 50,
+    speedNote: "Ověřeno europa.eu/youreurope: vozidla >3,5 t – dálnice 90 km/h.",
     winterTyresRequired: false, winterTyresPeriod: "Doporučeny, nejsou povinné plošně. Povinné při značení na silnici.",
     emergencyNumber: "112", policeNumber: "091",
     requiredEquipment: ["Výstražný trojúhelník (2×)", "Reflexní vesta (2×)"],
@@ -309,6 +318,7 @@ export const countries: Country[] = [
     maxWeight: 48, maxLength: 18.75, maxWidth: 2.55, maxHeight: 4.0,
     tollSystem: "Elektronické mýto (OBU)", tollInfo: "Povinné pro vozidla nad 3,5 t na dálnicích a silnicích I. třídy. OBU registrace přes Mýto CZ.",
     speedHighway: 80, speedRoad: 80, speedCity: 50,
+    alcoholGeneral: "0,0", alcoholProfessional: "0,0",
     winterTyresRequired: true, winterTyresPeriod: "1. listopadu – 31. března",
     emergencyNumber: "112", policeNumber: "158",
     requiredEquipment: ["Výstražný trojúhelník", "Reflexní vesta", "Lékárnička", "Hasicí přístroj"],
@@ -872,7 +882,9 @@ export const countries: Country[] = [
     code: "UK", name: "Velká Británie", flag: "🇬🇧", capital: "Londýn", currency: "GBP",
     maxWeight: 44, maxLength: 18.75, maxWidth: 2.55, maxHeight: 4.0,
     tollSystem: "Dart Charge (M25), M6 Toll, London Congestion Charge", tollInfo: "Dartford Crossing (M25): kamiony £6. M6 Toll (Midlands): kamiony £12–17. London Congestion Charge: £15/den. ULEZ (Ultra Low Emission Zone): £100/den pro nesplňující vozidla.",
-    speedHighway: 96, speedRoad: 64, speedCity: 48,
+    speedHighway: 96, speedRoad: 80, speedCity: 48,
+    speedNote: "Ověřeno gov.uk/speed-limits: HGV >7,5 t – dálnice 96 km/h (60 mph), dual carriageway 96 km/h (60 mph), single carriageway 80 km/h (50 mph). Skotsko: single 64 km/h (40 mph), dual 80 km/h (50 mph). Obec standard 48 km/h (30 mph), v mnoha oblastech 32 km/h (20 mph).",
+    alcoholGeneral: "0,8 (Anglie/Wales) / 0,5 (Skotsko)",
     winterTyresRequired: false, winterTyresPeriod: "Nejsou povinné; doporučeny ve Skotsku a severní Anglii v zimě",
     emergencyNumber: "112", policeNumber: "999",
     requiredEquipment: ["Výstražný trojúhelník", "Reflexní vesta"],

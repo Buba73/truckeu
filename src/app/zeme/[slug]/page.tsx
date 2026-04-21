@@ -65,7 +65,33 @@ export default async function CountryPage({ params }: { params: Promise<{ slug: 
                 </div>
               ))}
             </div>
+            {country.speedNote && (
+              <p className="text-xs text-slate-400 mt-3 border-t border-slate-700 pt-3">{country.speedNote}</p>
+            )}
           </div>
+
+          {/* Alkohol */}
+          {(country.alcoholGeneral || country.alcoholProfessional) && (
+            <div className="bg-slate-800 border border-slate-700 rounded-xl p-5">
+              <h2 className="font-bold text-white mb-4 flex items-center gap-2">🍺 Povolená hladina alkoholu</h2>
+              <div className="grid grid-cols-2 gap-3">
+                {country.alcoholGeneral && (
+                  <div className="bg-slate-700 rounded-lg p-3">
+                    <div className="text-xs text-slate-400 mb-1">Obecný limit</div>
+                    <div className="text-amber-400 font-bold font-mono">{country.alcoholGeneral} ‰</div>
+                    <div className="text-xs text-slate-500">g/l krve</div>
+                  </div>
+                )}
+                {country.alcoholProfessional && (
+                  <div className="bg-slate-700 rounded-lg p-3">
+                    <div className="text-xs text-slate-400 mb-1">Profesionální řidič</div>
+                    <div className={`font-bold font-mono ${country.alcoholProfessional === "0,0" ? "text-red-400" : "text-amber-400"}`}>{country.alcoholProfessional} ‰</div>
+                    <div className="text-xs text-slate-500">kamion / autobus</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Zákazy jízd */}
           <div className="bg-slate-800 border border-red-900/50 rounded-xl p-5">
