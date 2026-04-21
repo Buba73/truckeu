@@ -2,6 +2,7 @@ export default function SubNav({ active }: { active: string }) {
   const links = [
     { href: "/", label: "Přehled" },
     { href: "/zakazy", label: "Zákazy jízd" },
+    { href: "/kalkulacka", label: "Kalkulačka" },
     { href: "/upozorneni", label: "Omezení & Uzavírky" },
     { href: "/rady", label: "Rady & Tipy" },
     { href: "/zeme", label: "Státy EU" },
