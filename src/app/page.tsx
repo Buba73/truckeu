@@ -1,5 +1,7 @@
 import { getLatestRoadworks, Roadwork } from "@/lib/supabase";
 
+export const revalidate = 7200; // ISR – obnoví každé 2 hodiny
+
 async function loadRoadworks(): Promise<Roadwork[]> {
   try {
     return await getLatestRoadworks(6);

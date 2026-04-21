@@ -3,25 +3,31 @@ import { fetchRoads, fetchRoadworks, fetchClosures, AutobahnItem } from "@/lib/a
 import { translateToCzech } from "@/lib/gemini";
 import { upsertRoadwork } from "@/lib/supabase";
 
-// null = všechny dálnice z API
-const PRIORITY_ROADS: string[] | null = null;
+// Vercel Hobby = max 10s per request → zpracujeme dávku dálnic najednou
+// Cron běží denně, 110 dálnic / 10 dávek = 11 dálnic per run → 10 cronů = vše
+const BATCH_SIZE = 11;
 
 const CRON_SECRET = process.env.CRON_SECRET;
 
+export const maxDuration = 60; // Pro případ Pro plánu
+
 export async function GET(request: Request) {
-  // Ochrana cron endpointu
   const authHeader = request.headers.get("authorization");
   if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const results = { processed: 0, errors: 0, roads: [] as string[] };
+  // ?batch=0..9 určuje kterou dávku zpracovat (default 0)
+  const url = new URL(request.url);
+  const batch = parseInt(url.searchParams.get("batch") ?? "0", 10);
+
+  const results = { processed: 0, errors: 0, roads: [] as string[], batch };
 
   try {
     const allRoads = await fetchRoads();
-    const roads = PRIORITY_ROADS ? allRoads.filter((r) => PRIORITY_ROADS.includes(r)) : allRoads;
+    const batchRoads = allRoads.slice(batch * BATCH_SIZE, (batch + 1) * BATCH_SIZE);
 
-    for (const road of roads) {
+    for (const road of batchRoads) {
       try {
         const [roadworks, closures] = await Promise.all([
           fetchRoadworks(road),
