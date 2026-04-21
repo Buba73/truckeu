@@ -116,6 +116,35 @@ export default async function CountryPage({ params }: { params: Promise<{ slug: 
 
         </div>
 
+        {/* Lokální a regionální zákazy */}
+        {country.localBans.length > 0 && (
+          <div className="md:col-span-2 bg-slate-800 border border-orange-900/50 rounded-xl p-5">
+            <h2 className="font-bold text-white mb-4 flex items-center gap-2">⚠️ Lokální a regionální zákazy</h2>
+            <div className="space-y-4">
+              {country.localBans.map((ban) => (
+                <div key={ban.title} className="border-l-2 border-orange-700 pl-4">
+                  <div className="font-semibold text-white text-sm mb-1">{ban.title}</div>
+                  {ban.routes && (
+                    <div className="text-xs text-orange-400 mb-1">Trasy: {ban.routes}</div>
+                  )}
+                  {ban.period && (
+                    <div className="text-xs text-slate-400 mb-1">Platnost: {ban.period}</div>
+                  )}
+                  <p className="text-slate-300 text-sm mb-2">{ban.description}</p>
+                  <a
+                    href={ban.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300"
+                  >
+                    Zdroj: {ban.sourceLabel} ↗
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Tísňová čísla */}
         <div className="mt-6 bg-slate-800 border border-slate-700 rounded-xl p-5">
           <h2 className="font-bold text-white mb-4 flex items-center gap-2">📞 Tísňová čísla</h2>
