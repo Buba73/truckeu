@@ -27,6 +27,15 @@ export async function upsertRoadwork(item: Omit<Roadwork, "id" | "updated_at">) 
   if (error) throw error;
 }
 
+export async function bulkUpsertRoadworks(items: Omit<Roadwork, "id" | "updated_at">[]) {
+  const supabase = getClient();
+  const now = new Date().toISOString();
+  const { error } = await supabase
+    .from("roadworks")
+    .upsert(items.map(i => ({ ...i, updated_at: now })), { onConflict: "identifier" });
+  if (error) throw error;
+}
+
 export async function getLatestRoadworks(limit = 10): Promise<Roadwork[]> {
   const supabase = getClient();
   const { data, error } = await supabase
