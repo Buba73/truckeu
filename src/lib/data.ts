@@ -1,3 +1,10 @@
+export interface BanWindow {
+  days: number[]; // 0=Sun, 1=Mon … 6=Sat
+  startHour: number;
+  endHour: number; // 24 = midnight end-of-day
+  seasonMonths?: number[]; // 1-based; if set, window only applies in these months
+}
+
 export interface DrivingBan {
   country: string;
   flag: string;
@@ -5,6 +12,33 @@ export interface DrivingBan {
   holiday: string;
   notes: string;
   maxWeight: string;
+  countryCode: string;
+  timezone: string;
+  banWindows: BanWindow[];
+}
+
+export function isBanActive(ban: DrivingBan, now: Date = new Date()): boolean {
+  const fmt = (type: Intl.DateTimeFormatPartTypes) =>
+    new Intl.DateTimeFormat("en", { timeZone: ban.timezone, [type]: type === "weekday" ? "short" : "numeric", hour12: false })
+      .formatToParts(now)
+      .find((p) => p.type === type)?.value ?? "";
+
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const day = dayNames.indexOf(fmt("weekday"));
+  const hour = parseInt(
+    new Intl.DateTimeFormat("en", { timeZone: ban.timezone, hour: "numeric", hour12: false })
+      .formatToParts(now)
+      .find((p) => p.type === "hour")?.value ?? "0",
+    10
+  );
+  const month = parseInt(fmt("month"), 10);
+
+  return ban.banWindows.some((w) => {
+    if (!w.days.includes(day)) return false;
+    if (w.seasonMonths && !w.seasonMonths.includes(month)) return false;
+    const end = w.endHour === 24 ? 24 : w.endHour;
+    return hour >= w.startHour && hour < end;
+  });
 }
 
 export interface RoadAlert {
@@ -35,6 +69,11 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 0:00–22:00",
     notes: "Platí pro vozidla nad 7,5 t nebo s přívěsem nad 3,5 t",
     maxWeight: "7,5 t",
+    countryCode: "DE",
+    timezone: "Europe/Berlin",
+    banWindows: [
+      { days: [6, 0], startHour: 0, endHour: 22 },
+    ],
   },
   {
     country: "Rakousko",
@@ -43,6 +82,12 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 0:00–22:00",
     notes: "Noční zákaz 22:00–5:00 platí na vybraných trasách celoročně",
     maxWeight: "7,5 t",
+    countryCode: "AT",
+    timezone: "Europe/Vienna",
+    banWindows: [
+      { days: [6], startHour: 15, endHour: 24 },
+      { days: [0], startHour: 0, endHour: 22 },
+    ],
   },
   {
     country: "Francie",
@@ -51,6 +96,13 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 0:00–24:00",
     notes: "Mimo sezónu: So 22:00–Ne 20:00. Kategorie B, C, D dle sezóny",
     maxWeight: "7,5 t",
+    countryCode: "FR",
+    timezone: "Europe/Paris",
+    banWindows: [
+      { days: [6], startHour: 22, endHour: 24 },
+      { days: [0], startHour: 0, endHour: 20 },
+      { days: [0], startHour: 20, endHour: 22, seasonMonths: [7, 8] },
+    ],
   },
   {
     country: "Itálie",
@@ -59,6 +111,12 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 7:00–22:00",
     notes: "V létě rozšíření zákazu. Výjimky pro čerstvé potraviny",
     maxWeight: "7,5 t",
+    countryCode: "IT",
+    timezone: "Europe/Rome",
+    banWindows: [
+      { days: [6], startHour: 14, endHour: 22 },
+      { days: [0], startHour: 7, endHour: 22 },
+    ],
   },
   {
     country: "Španělsko",
@@ -67,6 +125,12 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 0:00–22:00",
     notes: "Pravidla se liší podle autonomního regionu",
     maxWeight: "7,5 t",
+    countryCode: "ES",
+    timezone: "Europe/Madrid",
+    banWindows: [
+      { days: [6], startHour: 13, endHour: 24, seasonMonths: [7, 8] },
+      { days: [0], startHour: 0, endHour: 22, seasonMonths: [7, 8] },
+    ],
   },
   {
     country: "Polsko",
@@ -75,6 +139,13 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 8:00–22:00",
     notes: "Červenec–srpen: rozšíření Ne 8:00–22:00 i na So 8:00–22:00",
     maxWeight: "12 t",
+    countryCode: "PL",
+    timezone: "Europe/Warsaw",
+    banWindows: [
+      { days: [6], startHour: 18, endHour: 24 },
+      { days: [0], startHour: 0, endHour: 22 },
+      { days: [6], startHour: 8, endHour: 18, seasonMonths: [7, 8] },
+    ],
   },
   {
     country: "Česko",
@@ -83,6 +154,11 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 13:00–22:00",
     notes: "Platí pro vozidla nad 7,5 t",
     maxWeight: "7,5 t",
+    countryCode: "CZ",
+    timezone: "Europe/Prague",
+    banWindows: [
+      { days: [0], startHour: 13, endHour: 22 },
+    ],
   },
   {
     country: "Slovensko",
@@ -91,6 +167,13 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 13:00–22:00",
     notes: "Červen–srpen: So 7:00–19:00 a Ne 7:00–22:00",
     maxWeight: "7,5 t",
+    countryCode: "SK",
+    timezone: "Europe/Bratislava",
+    banWindows: [
+      { days: [0], startHour: 13, endHour: 22 },
+      { days: [6], startHour: 7, endHour: 19, seasonMonths: [6, 7, 8] },
+      { days: [0], startHour: 7, endHour: 13, seasonMonths: [6, 7, 8] },
+    ],
   },
   {
     country: "Švýcarsko",
@@ -99,6 +182,11 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Ne 0:00–24:00",
     notes: "Přísný noční zákaz 22:00–5:00 celoroční pro nad 3,5 t",
     maxWeight: "3,5 t",
+    countryCode: "CH",
+    timezone: "Europe/Zurich",
+    banWindows: [
+      { days: [6, 0], startHour: 0, endHour: 24 },
+    ],
   },
   {
     country: "Maďarsko",
@@ -107,6 +195,13 @@ export const drivingBans: DrivingBan[] = [
     holiday: "Státní svátky 0:00–22:00",
     notes: "V létě (červenec–srpen) rozšíření So od 15:00",
     maxWeight: "7,5 t",
+    countryCode: "HU",
+    timezone: "Europe/Budapest",
+    banWindows: [
+      { days: [6], startHour: 22, endHour: 24 },
+      { days: [0], startHour: 0, endHour: 22 },
+      { days: [6], startHour: 15, endHour: 22, seasonMonths: [7, 8] },
+    ],
   },
 ];
 
