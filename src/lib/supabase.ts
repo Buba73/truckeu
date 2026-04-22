@@ -1,5 +1,28 @@
 import { createClient } from "@supabase/supabase-js";
 
+export interface OfficialPortal {
+  id: number;
+  country_code: string;
+  portal_type: "toll" | "traffic_info" | "bans" | "regulations" | "permits" | "general";
+  name: string;
+  url: string;
+  language: string | null;
+  notes: string | null;
+}
+
+export async function getPortals(countryCode: string): Promise<OfficialPortal[]> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_SERVICE_KEY;
+  if (!url || !key) return [];
+  const sb = createClient(url, key);
+  const { data } = await sb
+    .from("official_portals")
+    .select("id, country_code, portal_type, name, url, language, notes")
+    .eq("country_code", countryCode.toUpperCase())
+    .order("portal_type");
+  return data ?? [];
+}
+
 export interface Roadwork {
   id?: number;
   identifier: string;
