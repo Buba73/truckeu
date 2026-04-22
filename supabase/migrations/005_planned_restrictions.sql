@@ -45,11 +45,6 @@ CREATE TABLE IF NOT EXISTS planned_restrictions (
   source_label    TEXT,                                 -- název portálu / instituce
 
   -- Meta
-  is_active       BOOLEAN GENERATED ALWAYS AS (
-    valid_from IS NULL OR (
-      valid_from <= NOW() AND (valid_to IS NULL OR valid_to >= NOW())
-    )
-  ) STORED,
   created_at      TIMESTAMPTZ DEFAULT NOW(),
   updated_at      TIMESTAMPTZ DEFAULT NOW()
 );
@@ -58,7 +53,6 @@ CREATE TABLE IF NOT EXISTS planned_restrictions (
 CREATE INDEX idx_pr_country     ON planned_restrictions(country_code);
 CREATE INDEX idx_pr_valid_from  ON planned_restrictions(valid_from);
 CREATE INDEX idx_pr_valid_to    ON planned_restrictions(valid_to);
-CREATE INDEX idx_pr_active      ON planned_restrictions(is_active, country_code);
 
 -- Veřejné čtení
 ALTER TABLE planned_restrictions ENABLE ROW LEVEL SECURITY;
@@ -67,7 +61,5 @@ CREATE POLICY "public_read" ON planned_restrictions
 
 COMMENT ON TABLE planned_restrictions IS
   'Plánované uzavírky, omezení a zákazy pro nákladní dopravu. Každý záznam musí mít source_url z oficiálního dopravního portálu nebo ministerstva.';
-COMMENT ON COLUMN planned_restrictions.is_active IS
-  'Vypočítáno automaticky: TRUE pokud platnost zahrnuje aktuální čas.';
 COMMENT ON COLUMN planned_restrictions.restriction_type IS
   'Typ omezení: closure=uzavírka, weight_limit=omezení hmotnosti, ban=zákaz vjezdu HGV, detour=povinná objížďka, atd.';

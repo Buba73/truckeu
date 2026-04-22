@@ -73,7 +73,6 @@ interface PlannedRestriction {
   description_cs: string | null;
   source_url: string;
   source_label: string | null;
-  is_active: boolean;
 }
 
 async function getRestrictions(countryCode: string): Promise<PlannedRestriction[]> {
@@ -83,7 +82,7 @@ async function getRestrictions(countryCode: string): Promise<PlannedRestriction[
   const sb = createClient(url, key);
   const { data } = await sb
     .from("planned_restrictions")
-    .select("id, restriction_type, vehicle_type, valid_from, valid_to, road_number, location_text, description_cs, source_url, source_label, is_active")
+    .select("id, restriction_type, vehicle_type, valid_from, valid_to, road_number, location_text, description_cs, source_url, source_label")
     .eq("country_code", countryCode.toUpperCase())
     .order("valid_from", { ascending: true });
   return (data as PlannedRestriction[]) ?? [];
@@ -510,7 +509,8 @@ export default async function CountryPage({ params }: { params: Promise<{ slug: 
                       <span className="text-[11px] font-medium px-2 py-0.5 rounded border bg-slate-700 text-slate-300 border-slate-600">
                         {VEHICLE_LABELS[r.vehicle_type] ?? r.vehicle_type}
                       </span>
-                      {r.is_active && (
+                      {(r.valid_to == null || new Date(r.valid_to) >= new Date()) &&
+                       (r.valid_from == null || new Date(r.valid_from) <= new Date()) && (
                         <span className="text-[11px] font-medium px-2 py-0.5 rounded border bg-green-900/50 text-green-400 border-green-700">
                           Aktivní
                         </span>
